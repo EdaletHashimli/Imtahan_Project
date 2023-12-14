@@ -1,0 +1,94 @@
+﻿@model Imtahan_Project.Models.ExamM.Exam
+
+@{
+
+}
+
+<script>
+
+    function validateForm() {
+
+       
+        var ed = document.getElementById('ed').value;
+        var edError = document.getElementById('edError');
+        var re = document.getElementById('re').value;
+        var reError = document.getElementById('reError');
+        var xeta = false;
+
+        if (ed === '') {
+            edError.innerHTML = 'İmtahan tarixi sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (re.trim() === '') {
+            reError.innerHTML = 'İmtahan nəticəsi sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (xeta) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateEd() {
+        var ed = document.getElementById('ed').value;
+        var edError = document.getElementById('edError');
+
+        if (ed === '') {
+            edError.innerHTML = 'İmtahan tarixi sahəsi boş ola bilməz';
+        }
+        else {
+            edError.innerHTML = '';
+        }
+    }
+
+    function validateRe() {
+        var re = document.getElementById('re').value;
+        var reError = document.getElementById('reError');
+
+        if (re.trim() === '') {
+            reError.innerHTML = 'İmtahan nəticəsi sahəsi boş ola bilməz';
+        }
+        else {
+            reError.innerHTML = '';
+        }
+    }
+
+</script>
+<h1> İmtahan əlavə et</h1>
+<form method="post" action="AddExam" class="mt-5" onsubmit="return validateForm()">
+    <div class="mb-3">
+        <input type="number" class="form-control" asp-for="ExamId" hidden>
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" asp-for="SubjectCode" hidden>
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" asp-for="SubjectName" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Sinif</label>
+        <input type="text" class="form-control" asp-for="Class" readonly>
+    </div>
+    <div class="mb-3">
+        <input type="number" class="form-control" asp-for="StudentNumber" hidden>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Imtahan fənni </label>
+        <input type="text" class="form-control" asp-for="StudentName" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">İmtahan tarixi</label>
+        <input type="date" id="ed" oninput="validateEd()" class="form-control" asp-for="ExamDate">
+        <p class="text-white">.<span class="text-danger" id="edError"></span></p>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Nəticə</label>
+        <input type="number" id="re" oninput="validateRe()" class="form-control" inputMode="numeric" pattern="[0-9]*" min="0" max="100" onKeyUp="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}" asp-for="Result">
+        <p class="text-white">.<span class="text-danger" id="reError"></span></p>
+    </div>
+    <button type="submit" class="btn btn-primary">Təsdiq et</button>
+    <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Exam">Delete</button>
+</form>

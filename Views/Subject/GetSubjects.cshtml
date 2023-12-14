@@ -1,0 +1,42 @@
+﻿@model List<Imtahan_Project.Models.SubjectM.Subject>
+
+@{
+    var groupedSubjects = Model.GroupBy(subject => subject.SubjectName).OrderBy(group => group.Key).ToList();
+}
+
+<h1 class="text-center">Dərslər</h1>
+
+    @foreach (var group in groupedSubjects)
+    {
+        <h2>@group.Key</h2>
+        <p class="text-white">.</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Dərs kodu</th>
+                    <th>Dərs adı</th>
+                    <th>Sinif</th>
+                    <th>Müəllim adı</th>
+                    <th>Müəllim soyadı</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var subject in group.OrderBy(subject => subject.Class))
+                {
+                    <tr>
+                        <td>@subject.SubjectCode</td>
+                        <td>@subject.SubjectName</td>
+                        <td>@subject.Class</td>
+                        <td>@subject.SubjectTeacherName</td>
+                        <td>@subject.SubjectTeacherSurName</td>
+                        <td><a href="@Url.Action("View", "Subject", new { code = subject.SubjectCode })"><button class="btn btn-primary">Düzəliş et</button></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+<a class="nav-link text-dark" asp-area="" asp-controller="Subject" asp-action="Add">
+    <button class="bg-dark rounded fs-3 text-white">Əlavə et</button>
+</a>

@@ -1,0 +1,145 @@
+﻿@model Imtahan_Project.Models.SubjectM.Subject
+@{
+    var subjectcodes = ViewBag.SubjectCodes as List<string>;
+}
+<script>
+    function validateForm() {
+
+            var sc = document.getElementById('selectedClass').value + document.getElementById('selectedSubject').value[0];
+            var scError = document.getElementById('scError');
+            var subjectCodes = @Html.Raw(Json.Serialize(subjectcodes));
+            var stn = document.getElementById('stn').value;
+            var stnError = document.getElementById('stnError');
+            var sts = document.getElementById('sts').value;
+            var stsError = document.getElementById('stsError');
+            var xeta = false;
+
+            
+            for (var i = 0; i < subjectCodes.length;i++ )
+            {
+            if (sc.trim() === subjectCodes[i].trim()) 
+            {
+            scError.innerHTML = 'Bu dərs artıq mövcuddur.';
+            xeta = true;
+                break;
+            }
+            else
+            {
+            scError.innerHTML = '';
+            }
+            }
+          
+
+            if (stn.trim() === '') {
+                stnError.innerHTML = 'Müəllim adı sahəsi boş ola bilməz';
+                xeta = true;
+            }
+
+            if (sts.trim() === '') {
+                stsError.innerHTML = 'Müəllim soyadı sahəsi boş ola bilməz';
+                xeta = true;
+            }
+
+            if (xeta) {
+                return false;
+            }
+        
+        return true;
+    }
+
+    function validateSc() {
+        var sc = document.getElementById('selectedClass').value + document.getElementById('selectedSubject').value[0];
+        var scError = document.getElementById('scError');
+        var subjectCodes = @Html.Raw(Json.Serialize(subjectcodes));
+
+        for (var i = 0; i < subjectCodes.length; i++) {
+            if (sc.trim() === subjectCodes[i].trim()) {
+                scError.innerHTML = 'Bu dərs artıq mövcuddur.';
+                break;
+            }
+            else {
+                scError.innerHTML = '';
+            }
+        }
+        
+    }
+
+    function validateStn() 
+    {
+        var stn = document.getElementById('stn').value;
+        var stnError = document.getElementById('stnError');
+
+        if (stn.trim() === '') 
+        {
+            stnError.innerHTML = 'Müəllim adı sahəsi boş ola bilməz';
+        } 
+        else 
+        {
+            stnError.innerHTML = '';
+        }
+    }
+
+    function validateSts() 
+    {
+        var sts = document.getElementById('sts').value;
+        var stsError = document.getElementById('stsError');
+
+        if (sts.trim() === '') 
+        {
+            stsError.innerHTML = 'Müəllim soyadı sahəsi boş ola bilməz';
+        } 
+        else 
+        {
+            stsError.innerHTML = '';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        validateSc();
+    });
+
+</script>
+<h1> Dərs əlavə et</h1>
+<form method="post" action="Add" class="mt-5" onsubmit="return validateForm()">
+    <div class="mb-3">
+        <label for="" class="form-label">Dərs adı</label>
+        <select class="form-select" aria-label="Default select example" asp-for="SubjectName" id="selectedSubject" onchange="validateSc()">
+            <option value="Azərbaycan dili">Azərbaycan dili</option>
+            <option value="Biologiya">Biologiya</option>
+            <option value="Coğrafiya">Coğrafiya</option>
+            <option value="Fizika">Fizika</option>
+            <option value="İngilis dili">İngilis dili</option>
+            <option value="Kimya">Kimya</option>
+            <option value="Riyaziyyat">Riyaziyyat</option>
+            <option value="Tarix">Tarix</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Sinif</label>
+        <select class="form-select" aria-label="Default select example" asp-for="Class" id="selectedClass" onchange="validateSc()">
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+            <option value=4>4</option>
+            <option value=5>5</option>
+            <option value=6>6</option>
+            <option value=7>7</option>
+            <option value=8>8</option>
+            <option value=9>9</option>
+            <option value=10>10</option>
+            <option value=11>11</option>
+        </select>
+        <p class="text-white">.<span class="text-danger" id="scError"></span></p>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Müəllim adı</label>
+        <input type="text" id="stn" oninput="validateStn()" onkeydown="return /^[A-Za-zÇçƏəĞğIıİiÖöŞşÜüÄäÖöß]+$/i.test(event.key)" class="form-control" asp-for="SubjectTeacherName">
+        <p class="text-white">.<span class="text-danger" id="stnError"></span></p>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Müəllim soyadı</label>
+        <input type="text" id="sts" oninput="validateSts()" onkeydown="return /^[A-Za-zÇçƏəĞğIıİiÖöŞşÜüÄäÖöß]+$/i.test(event.key)" class="form-control" asp-for="SubjectTeacherSurName">
+        <p class="text-white">.<span class="text-danger" id="stsError"></span></p>
+    </div>
+    <button type="submit" class="btn btn-primary">Əlavə et</button>
+</form>

@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <div class="d-flex align-items-center justify-content-around " style="height: 80vh;">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Subject" asp-action="GetSubjects">
+            <button class="p-5 bg-primary rounded fs-3 text-white border-primary" style="width:300px">Dərslər</button>
+        </a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Student" asp-action="GetStudents">
+            <button class="p-5 bg-danger rounded fs-3 text-white border-danger" style="width:300px">Şagirdlər</button>
+        </a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Exam" asp-action="GetExams">
+            <button class="p-5 bg-success rounded fs-3 text-white border-success" style="width:300px">İmtahanlar</button>
+        </a>
+    </div>
+</div>

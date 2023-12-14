@@ -1,0 +1,115 @@
+﻿@model Imtahan_Project.Models.StudentM.Student
+
+@{
+}
+
+<script>
+    function validateForm() {
+
+        var sn = document.getElementById('sn').value;
+        var snError = document.getElementById('snError');
+        var ss = document.getElementById('ss').value;
+        var ssError = document.getElementById('ssError');
+        var pn = document.getElementById('pn').value;
+        var pnError = document.getElementById('pnError');
+        var xeta = false;
+
+        if (sn.trim() === '') {
+            snError.innerHTML = 'Şagird adı sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (ss.trim() === '') {
+            ssError.innerHTML = 'Şagird soyadı sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (pn.trim() === '') {
+            pnError.innerHTML = 'Ata adı sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (xeta) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateSn() {
+        var sn = document.getElementById('sn').value;
+        var snError = document.getElementById('snError');
+
+        if (sn.trim() === '') {
+            snError.innerHTML = 'Şagird adı sahəsi boş ola bilməz';
+        }
+        else {
+            snError.innerHTML = '';
+        }
+    }
+
+    function validateSs() {
+        var ss = document.getElementById('ss').value;
+        var ssError = document.getElementById('ssError');
+
+        if (ss.trim() === '') {
+            ssError.innerHTML = 'Şagird soyadı sahəsi boş ola bilməz';
+        }
+        else {
+            ssError.innerHTML = '';
+        }
+    }
+
+    function validatePn() {
+        var pn = document.getElementById('pn').value;
+        var pnError = document.getElementById('pnError');
+
+        if (pn.trim() === '') {
+            pnError.innerHTML = 'Ata adı sahəsi boş ola bilməz';
+        }
+        else {
+            pnError.innerHTML = '';
+        }
+    }
+</script>
+
+<h1> Şagird məlumatlarına düzəliş et</h1>
+<form method="post" action="ViewStudent" class="mt-5" onsubmit="return validateForm()">
+    <div class="mb-3">
+        <label for="" class="form-label">Şagird nömrəsi</label>
+        <input type="text" class="form-control" asp-for="StudentNumber" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Şagird adı</label>
+        <input type="text" id="sn" oninput="validateSn()" onkeydown="return /^[A-Za-zÇçƏəĞğIıİiÖöŞşÜüÄäÖöß]+$/i.test(event.key)" class="form-control" asp-for="StudentName">
+        <p class="text-white">.<span class="text-danger" id="snError"></span></p>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Şagird soyadı</label>
+        <input type="text" id="ss" oninput="validateSs()" onkeydown="return /^[A-Za-zÇçƏəĞğIıİiÖöŞşÜüÄäÖöß]+$/i.test(event.key)" class="form-control" asp-for="StudentSurName">
+        <p class="text-white">.<span class="text-danger" id="ssError"></span></p>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Ata adı</label>
+        <input type="text" id="pn" oninput="validatePn()" onkeydown="return /^[A-Za-zÇçƏəĞğIıİiÖöŞşÜüÄäÖöß]+$/i.test(event.key)" class="form-control" asp-for="ParentName">
+        <p class="text-white">.<span class="text-danger" id="pnError"></span></p>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Sinif</label>
+        <select class="form-select" aria-label="Default select example" asp-for="Class">
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+            <option value=4>4</option>
+            <option value=5>5</option>
+            <option value=6>6</option>
+            <option value=7>7</option>
+            <option value=8>8</option>
+            <option value=9>9</option>
+            <option value=10>10</option>
+            <option value=11>11</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Təsdiq et</button>
+    <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Student">Delete</button>
+</form>

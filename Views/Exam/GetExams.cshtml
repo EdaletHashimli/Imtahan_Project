@@ -1,0 +1,44 @@
+﻿@model List<Imtahan_Project.Models.ExamM.Exam>
+
+@{
+    var groupedExams = Model.GroupBy(exams => exams.SubjectName).OrderBy(group => group.Key).ToList();
+}
+
+
+<h1 class="text-center">İmtahanlar</h1>
+@foreach (var group in groupedExams)  
+{
+    <h2>@group.Key</h2>
+    <p class="text-white">.</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>İmtahan Fənni</th>
+                <th>Sinif</th>
+                <th>Şagird adı-soyadı</th>
+                <th>İmtahan tarixi</th>
+                <th>Nəticə</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var exam in group.OrderBy(exam => exam.Class))
+            {
+
+                <tr>
+                    <td>@exam.SubjectName</td>
+                    <td>@exam.Class</td>
+                    <td>@exam.StudentName</td>
+                    <td>@exam.ExamDate.ToString("dd/MM/yyyy")</td>
+                    <td>@exam.Result</td>
+                    <td><a href="@Url.Action("ViewExam", "Exam", new { id = exam.ExamId })"><button class="btn btn-primary">Düzəliş et</button></a></td> 
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+<a class="nav-link text-dark" asp-area="" asp-controller="Exam" asp-action="AddExam">
+    <button class="bg-dark rounded fs-3 text-white">Əlavə et</button>
+</a>

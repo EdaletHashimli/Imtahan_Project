@@ -1,0 +1,83 @@
+﻿@model Imtahan_Project.Models.SubjectM.Subject
+@{
+}
+<script>
+    function validateForm() {
+        
+        var stn = document.getElementById('stn').value;
+        var stnError = document.getElementById('stnError');
+        var sts = document.getElementById('sts').value;
+        var stsError = document.getElementById('stsError');
+        var xeta = false;
+
+        if (stn.trim() === '') {
+            stnError.innerHTML = 'Müəllim adı sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (sts.trim() === '') {
+            stsError.innerHTML = 'Müəllim soyadı sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (xeta) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateStn() {
+        var stn = document.getElementById('stn').value;
+        var stnError = document.getElementById('stnError');
+
+        if (stn.trim() === '') {
+            stnError.innerHTML = 'Müəllim adı sahəsi boş ola bilməz';
+        }
+        else {
+            stnError.innerHTML = '';
+        }
+    }
+
+    function validateSts() {
+        var sts = document.getElementById('sts').value;
+        var stsError = document.getElementById('stsError');
+
+        if (sts.trim() === '') {
+            stsError.innerHTML = 'Müəllim soyadı sahəsi boş ola bilməz';
+        }
+        else {
+            stsError.innerHTML = '';
+        }
+    }
+</script>
+<h1> Dərs məlumatlarına düzəliş et</h1>
+<form method="post" action="View" class="mt-5" onsubmit="return validateForm()">
+    <div class="mb-3">
+        <label for="" class="form-label">Dərs kodu</label>
+        <input type="text"class="form-control" asp-for="SubjectCode" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Dərs adı</label>
+        <input type="text" class="form-control" asp-for="SubjectName" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Sinif</label>
+        <input type="text" class="form-control" asp-for="Class" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Müəllim adı</label>
+        <input type="text" id="stn" oninput="validateStn()" onkeydown="return /^[A-Za-zÇçƏəĞğIıİiÖöŞşÜüÄäÖöß]+$/i.test(event.key)" class="form-control" asp-for="SubjectTeacherName">
+        <p class="text-white">.<span class="text-danger" id="stnError"></span></p>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Müəllim soyadı</label>
+        <input type="text" id="sts" oninput="validateSts()" onkeydown="return /^[A-Za-zÇçƏəĞğIıİiÖöŞşÜüÄäÖöß]+$/i.test(event.key)" class="form-control" asp-for="SubjectTeacherSurName">
+        <p class="text-white">.<span class="text-danger" id="stsError"></span></p>
+    </div>
+    <button type="submit" class="btn btn-primary">Təsdiq et</button>
+    <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Subject">Delete</button>
+</form>
+
+
+

@@ -1,0 +1,212 @@
+﻿@model Imtahan_Project.Models.ExamM.Exam
+
+@{
+    var exams = ViewBag.Exams as Dictionary<string, List<string>>;
+}
+
+<script>
+    
+    function validateForm() {
+
+        var selectedStudent = document.getElementById('studentSelect').value;
+        var snError = document.getElementById('snError');
+        var selectedSubject = document.getElementById('subjectSelect').value;
+        var exams = @Html.Raw(Json.Serialize(ViewBag.Exams));
+        var ed = document.getElementById('ed').value;
+        var edError = document.getElementById('edError');
+        var re = document.getElementById('re').value;
+        var reError = document.getElementById('reError');
+        var xeta = false;
+
+        var studentNames = exams[selectedSubject];
+
+        if (studentNames && studentNames.includes(selectedStudent)) {
+            snError.innerHTML = 'Bu şagird bu fənndən artıq imtahan verib';
+            xeta = true;
+        } else {
+            snError.innerHTML = '';
+        }
+
+        if (selectedStudent.trim() === '') {
+            snError.innerHTML = 'Şagird adı sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (ed === '') {
+            edError.innerHTML = 'İmtahan tarixi sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (re.trim() === '') {
+            reError.innerHTML = 'İmtahan nəticəsi sahəsi boş ola bilməz';
+            xeta = true;
+        }
+
+        if (xeta) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateSn() {
+        var snError = document.getElementById('snError'); // snError'ı tanımla
+        var selectedSubject = document.getElementById('subjectSelect').value;
+        var selectedStudent = document.getElementById('studentSelect').value;
+        var exams = @Html.Raw(Json.Serialize(exams));
+
+
+        var studentNames = exams[selectedSubject];
+
+        // Eğer studentNames varsa, bu öğrencinin daha önce imtahan verip vermediğini kontrol et
+        if (studentNames && studentNames.includes(selectedStudent)) {
+            snError.innerHTML = 'Bu şagird bu fənndən artıq imtahan verib';
+        } else {
+            snError.innerHTML = '';
+        }
+        if(selectedStudent.trim() === '')
+        {
+            snError.innerHTML = 'Şagird adı sahəsi boş ola bilməz'; 
+        }
+        
+
+    }
+
+    function validateEd() {
+        var ed = document.getElementById('ed').value;
+        var edError = document.getElementById('edError');
+
+        if (ed === '') {
+            edError.innerHTML = 'İmtahan tarixi sahəsi boş ola bilməz';
+        }
+        else {
+            edError.innerHTML = '';
+        }
+    }
+
+    function validateRe() {
+        var re = document.getElementById('re').value;
+        var reError = document.getElementById('reError');
+
+        if (re.trim() === '') {
+            reError.innerHTML = 'İmtahan nəticəsi sahəsi boş ola bilməz';
+        }
+        else {
+            reError.innerHTML = '';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () 
+    {
+        // Sayfa yüklendiğinde çalışacak fonksiyon
+        var classesData = @Html.Raw(ViewBag.ClassesData as string ?? "{}");
+        var studentsData = @Html.Raw(ViewBag.StudentsData as string ?? "{}");
+
+        loadClasses(); 
+        loadStudents();
+        validateSn();
+
+        // Ders adı seçildiğinde çalışacak fonksiyon
+        document.getElementById("subjectSelect").addEventListener("change", function () 
+        {
+            loadClasses();
+            loadStudents();
+            validateSn();
+        });
+        document.getElementById("classSelect").addEventListener("change", function () {
+            loadStudents();
+            validateSn();
+        });
+        // Sayfa yüklendiğinde veya ders adı değiştiğinde seçilen ders adına ait sınıfları yükle
+        function loadClasses() {
+            var selectedSubject = document.getElementById("subjectSelect").value;
+
+            // classesData nesnesini kontrol et
+            if (classesData && classesData[selectedSubject]) {
+                var classes = classesData[selectedSubject];
+
+                // Select elemanını temizle
+                var classSelect = document.getElementById("classSelect");
+                classSelect.innerHTML = "";
+
+                // Sınıfları select elemanına ekle
+                classes.forEach(function (item) {
+                    var option = document.createElement("option");
+                    option.value = item;
+                    option.textContent = item;
+                    classSelect.appendChild(option);
+                });
+            }
+        }
+        function loadStudents() 
+        {
+            var selectedClass = document.getElementById("classSelect").value;
+            var studentSelect = document.getElementById("studentSelect");
+
+            // classesData nesnesini kontrol et
+            if (studentsData && studentsData[selectedClass]) {
+                var students = studentsData[selectedClass];
+
+
+                // Select elemanını temizle
+                
+                studentSelect.innerHTML = "";
+
+                // Öğrenci isim ve soyadlarını select elemanına ekle
+                students.forEach(function (item) {
+                    var option = document.createElement("option");
+                    option.value = item;
+                    option.textContent = item;
+                    studentSelect.appendChild(option);
+                });
+            } 
+            else 
+            {
+                studentSelect.innerHTML = "";
+            }
+        }
+    });
+
+</script>
+<h1> İmtahan əlavə et</h1>
+<form method="post" action="AddExam" class="mt-5" onsubmit="return validateForm()">
+    <div class="mb-3">
+        <label for="" class="form-label">Dərs adı</label>
+        <select class="form-select" id="subjectSelect" aria-label="Default select example" asp-for="SubjectName">
+            @{
+                var subjectNames = ViewBag.SubjectNames as List<string> ?? new List<string>();
+
+                var SubjectNames = @Html.Raw(Json.Serialize(subjectNames));
+
+                foreach (var subject in subjectNames)
+                {
+                   <option value="@subject">@subject</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Sinif</label>
+        <select class="form-select" id="classSelect" aria-label="Default select example" asp-for="Class">
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Şagird adı-soyadı</label>
+        <select class="form-select" id="studentSelect" aria-label="Default select example" asp-for="StudentName" onchange="validateSn()">
+        </select>
+        <p class="text-white">.<span class="text-danger" id="snError"></span></p>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">İmtahan tarixi</label>
+        <input type="date" id="ed" oninput="validateEd()" class="form-control" asp-for="ExamDate">
+        <p class="text-white">.<span class="text-danger" id="edError"></span></p>
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Nəticə</label>
+        <input type="number" id="re" oninput="validateRe()" class="form-control" inputMode="numeric" pattern="[0-9]*" min="0" max="100" onKeyUp="if(this.value>100){this.value='100';}else if(this.value<0){this.value='0';}" asp-for="Result">
+        <p class="text-white">.<span class="text-danger" id="reError"></span></p>
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Əlavə et</button>
+</form>
+
