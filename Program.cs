@@ -5,9 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
   
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<ExamDbContext>(options => options.UseInMemoryDatabase("ExamDb"));
-//builder.Services.AddDbContext<ExamDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("ExamDbConnectionString")));
+//builder.Services.AddDbContext<ExamDbContext>(options => options.UseInMemoryDatabase("ExamDb"));
+builder.Services.AddDbContext<ExamDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ExamDbConnectionString")));
 
 var app = builder.Build();
 
